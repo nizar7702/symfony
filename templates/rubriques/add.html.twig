@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% form_theme formpro 'bootstrap_4_layout.html.twig' %}
+{% block body %}
+<h1>Add Produit</h1>
+{{form_start(formpro)}}
+ {{ form_row(formpro.rubrique, {
+            label: 'rubrique'
+        }) }}
+       
+
+<button type="submit"  class="btn btn-danger">Enregistrer</button>
+
+{{form_end(formpro)}}
+
+{% endblock %}

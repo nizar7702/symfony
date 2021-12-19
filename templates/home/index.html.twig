@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rubrique{% endblock %}
+
+{% block body %}
+
+<h1>liste des produits</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">rubrique</th>
+      <th scope="col"><a href="{{path('add_rubrique')}}" class="btn btn-danger">Add Rubrique</a></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for rubriques in rubrique %}
+    <tr> 
+      <th scope="row">{{rubriques.rubrique}}</th>
+      <th scope="col"><a href="{{path('category_index',{'id':rubriques.id})}}" class="btn btn-danger">VIEW</a></th>
+      <th scope="col"><a href="{{path('update_rubrique',{'id':rubriques.id})}}" class="btn btn-danger">EDIT</a></th>
+      <th scope="col"><a href="{{path('delete_rubrique',{'id':rubriques.id})}}" class="btn btn-danger">DELETE</a></th>
+    </tr>
+    
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
