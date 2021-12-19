@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Depots index{% endblock %}
+
+{% block body %}
+{% set ID = id %}
+    <h1>Depots index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th><a href="{{ path('depots_new', {'id':ID}) }}">add depot</a></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for depot in depots %}
+            <tr>
+                <td>{{ depot.id }}</td>
+                <td>{{ depot.title }}</td>
+                <td>
+                    <a href="{{ path('depots_show', {'id': depot.id}) }}">show</a>
+                    <a href="{{ path('depots_edit', {'id': depot.id,'id1':ID}) }}">edit</a>
+                    <a href="{{ path('depots_delete',{'id1':ID,'id2': depot.id}) }}">delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

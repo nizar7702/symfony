@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +29,16 @@ class Category
      * @ORM\Column(type="string", length=255)
      */
     private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Depots::class, mappedBy="category_id")
+     */
+    private $depots;
+
+    public function __construct()
+    {
+        $this->depots = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -55,5 +67,45 @@ class Category
         $this->category = $category;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Depots[]
+     */
+    public function getDepots(): Collection
+    {
+        return $this->depots;
+    }
+
+    public function addDepot(Depots $depot): self
+    {
+        if (!$this->depots->contains($depot)) {
+            $this->depots[] = $depot;
+            $depot->setCategoryId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepot(Depots $depot): self
+    {
+        if ($this->depots->removeElement($depot)) {
+            // set the owning side to null (unless already changed)
+            if ($depot->getCategoryId() === $this) {
+                $depot->setCategoryId(null);
+            }
+        }
+
+        return $this;
+    }
+    /**
+     * Generates the magic method
+     * 
+     */
+    public function __toString(){
+        // to show the name of the Category in the select
+        return $this->category;
+        // to show the id of the Category in the select
+        //return $this->id;
     }
 }
