@@ -28,6 +28,11 @@ class Depots
      */
     private $title;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ContenuDepot::class, mappedBy="depot_id", cascade={"persist", "remove"})
+     */
+    private $contenuDepot;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,5 +60,28 @@ class Depots
         $this->title = $title;
 
         return $this;
+    }
+
+    public function getContenuDepot(): ?ContenuDepot
+    {
+        return $this->contenuDepot;
+    }
+
+    public function setContenuDepot(ContenuDepot $contenuDepot): self
+    {
+        // set the owning side of the relation if necessary
+        if ($contenuDepot->getDepotId() !== $this) {
+            $contenuDepot->setDepotId($this);
+        }
+
+        $this->contenuDepot = $contenuDepot;
+
+        return $this;
+    }
+    public function __toString(){
+        // to show the name of the Category in the select
+        return $this->title;
+        // to show the id of the Category in the select
+        //return $this->id;
     }
 }

@@ -20,7 +20,7 @@
                 <td>{{ depot.id }}</td>
                 <td>{{ depot.title }}</td>
                 <td>
-                    <a href="{{ path('depots_show', {'id': depot.id}) }}">show</a>
+                    <a href="{{ path('contenu_depot_index', {'id': depot.id}) }}">show</a>
                     <a href="{{ path('depots_edit', {'id': depot.id,'id1':ID}) }}">edit</a>
                     <a href="{{ path('depots_delete',{'id1':ID,'id2': depot.id}) }}">delete</a>
                 </td>

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ContenuDepot{% endblock %}
+
+{% block body %}
+    <h1>Edit ContenuDepot</h1>
+
+    {{ include('contenu_depot/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+    {{ include('contenu_depot/_delete_form.html.twig') }}
+{% endblock %}
