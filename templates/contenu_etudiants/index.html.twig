@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContenuEtudiants index{% endblock %}
+
+{% block body %}
+{% set ID = id %}
+    <h1>ContenuEtudiants index</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fullname</th>
+                <th>Class</th>
+                <th>Description</th>
+                <th></th>
+                <th><a href="{{ path('contenu_etudiants_new', {'id':ID}) }}">add contenu</a></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contenu_etudiant in contenu_etudiants %}
+            <tr>
+                <td>{{ contenu_etudiant.id }}</td>
+                <td>{{ contenu_etudiant.Fullname }}</td>
+                <td>{{ contenu_etudiant.Class }}</td>
+                <td>{{ contenu_etudiant.Description }}</td>
+                <td><a href="{{ asset('/uploads/etudiants/') ~ contenu_etudiant.brochureFilename }}" download>download</a></td>
+                <td>
+                    <a href="{{ path('contenu_etudiants_edit', {'id':contenu_etudiant.id,'id1':ID})}}">edit</a>
+                    <a href="{{ path('contenu_etudiants_delete',{'id1':ID,'id2': contenu_etudiant.id}) }}">delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

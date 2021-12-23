@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ContenuDepot;
 use App\Entity\Depots;
+use App\Entity\Likes;
 use App\Form\ContenuDepotType;
 use App\Repository\ContenuDepotRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +26,10 @@ class ContenuDepotController extends AbstractController
     public function index(ContenuDepotRepository $contenuDepotRepository,$id): Response
     {   $repo = $this->getDoctrine()->getRepository(ContenuDepot::class);
         $contenu_depots = $repo->findBy(array('depot_id' => $id));
-        return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $contenu_depots, 'id' => $id]);
+        $repo1 = $this->getDoctrine()->getRepository(Likes::class);
+        $like = $repo1->findAll();
+        $likes=count($like);
+        return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $contenu_depots, 'id' => $id,'likes'=>$likes]);
     }
 
     /**
@@ -70,7 +74,10 @@ class ContenuDepotController extends AbstractController
             $repo = $this->getDoctrine()->getRepository(ContenuDepot::class);
             $contenu_depots = $repo->findBy(array('depot_id' => $id));
 
-            return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $contenu_depots, 'id' => $id]);
+            $repo1 = $this->getDoctrine()->getRepository(Likes::class);
+            $like = $repo1->findAll();
+            $likes=count($like);
+            return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $contenu_depots, 'id' => $id,'likes'=>$likes]);
         }
 
         return $this->renderForm('contenu_depot/new.html.twig', [
@@ -83,25 +90,53 @@ class ContenuDepotController extends AbstractController
      * @Route("/{id}", name="contenu_depot_show", methods={"GET"})
      */
     public function show(ContenuDepot $contenuDepot): Response
-    {
+    {   $filename = $contenuDepot->getBrochureFilename();
         return $this->render('contenu_depot/show.html.twig', [
-            'contenu_depot' => $contenuDepot,
+            'contenu_depot' => $contenuDepot,'filename' => $filename
         ]);
     }
 
     /**
      * @Route("/{id}/edit/{id1}", name="contenu_depot_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, ContenuDepot $contenuDepot, EntityManagerInterface $entityManager,$id,$id1): Response
+    public function edit(Request $request, ContenuDepot $contenuDepot, EntityManagerInterface $entityManager,$id,$id1,SluggerInterface $slugger): Response
     {
         $form = $this->createForm(ContenuDepotType::class, $contenuDepot);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $brochureFile = $form->get('brochure')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $contenuDepot->setBrochureFilename($newFilename);
+            }
             $entityManager->flush();
             $repo = $this->getDoctrine()->getRepository(ContenuDepot::class);
             $contenu_depots = $repo->findBy(array('depot_id' => $id1));
-            return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $contenu_depots, 'id' => $id]);
+
+            $repo1 = $this->getDoctrine()->getRepository(Likes::class);
+            $like = $repo1->findAll();
+            $likes=count($like);
+            return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $contenu_depots, 'id' => $id,'likes'=>$likes]);
         }
 
         return $this->renderForm('contenu_depot/edit.html.twig', [
@@ -122,6 +157,29 @@ class ContenuDepotController extends AbstractController
         $manager->flush();
         $repo = $this->getDoctrine()->getRepository(ContenuDepot::class);
         $depos1 = $repo->findBy(array('depot_id' => $id1));
-        return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $depos1, 'id' => $id1]);
+        $repo1 = $this->getDoctrine()->getRepository(Likes::class);
+        $like = $repo1->findAll();
+        $likes=count($like);
+        return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $depos1, 'id' => $id1,'likes'=>$likes]);
+    }
+    /**
+     * @Route("/like/{id}", name="contenu_depot_like", methods={"GET", "POST"})
+     */
+    public function like($id):Response
+    {   $manager=$this->getDoctrine()->getManager();
+        $user =$this->container->get('security.token_storage')->getToken()->getUser();
+        $repo = $this->getDoctrine()->getRepository(ContenuDepot::class);
+        $depots = $repo->find($id);
+        $like = new Likes();
+        $repo1 = $this->getDoctrine()->getRepository(Likes::class);
+        $likes = count(array([$repo1]));
+        $repoo = $this->getDoctrine()->getRepository(Depots::class);
+        $depoots = $repoo->find($id);
+        $like->setUserId($user)
+             ->setContenuDepotId($depots);
+        $manager->persist($like);
+        $manager->flush();
+        $depos1 = $repo->findBy(array('depot_id' => $id));
+        return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $depos1, 'id' => $id,'likes'=>$likes]);
     }
 }

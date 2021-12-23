@@ -2,21 +2,22 @@
 
 namespace App\Form;
 
-use App\Entity\ContenuDepot;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use App\Entity\ContenuEtudiants;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContenuDepotType extends AbstractType
+class ContenuEtudiantsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('description')
+            ->add('Fullname')
+            ->add('Class')
+            ->add('Description')
             ->add('brochure', FileType::class, [
-                'label' => 'Brochure ',
+                'label' => 'Brochure (PDF file)',
 
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
@@ -27,7 +28,6 @@ class ContenuDepotType extends AbstractType
 
                 // unmapped fields can't define their validation using annotations
                 // in the associated entity, so you can use the PHP constraint classes
-                
             ])
         ;
     }
@@ -35,7 +35,7 @@ class ContenuDepotType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ContenuDepot::class,
+            'data_class' => ContenuEtudiants::class,
         ]);
     }
 }

@@ -1,27 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rubrique{% endblock %}
-
+{% block title %}Rubrique
+{% endblock %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block body %}
-
-<h1>liste des produits</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">rubrique</th>
-      <th scope="col"><a href="{{path('add_rubrique')}}" class="btn btn-danger">Add Rubrique</a></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for rubriques in rubrique %}
-    <tr> 
-      <th scope="row">{{rubriques.rubrique}}</th>
-      <th scope="col"><a href="{{path('category_index',{'id':rubriques.id})}}" class="btn btn-danger">VIEW</a></th>
-      <th scope="col"><a href="{{path('update_rubrique',{'id':rubriques.id})}}" class="btn btn-danger">EDIT</a></th>
-      <th scope="col"><a href="{{path('delete_rubrique',{'id':rubriques.id})}}" class="btn btn-danger">DELETE</a></th>
-    </tr>
-    
-    {% endfor %}
-  </tbody>
-</table>
+    {{ form_start(form) }}
+	<div class="form-row align-items-end">
+		<div class="col">
+			{{ form_row(form.nom) }}
+		</div>
+		<div class="col">
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Rechercher</button>
+			</div>
+		</div>
+	</div>
+	{{ form_end(form) }}
+	<h1>liste des produits</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">rubrique</th>
+				<th scope="col">
+					<a href="{{path('add_rubrique')}}" class="btn btn-danger">Add Rubrique</a>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for rubriques in rubrique %}
+				<tr>
+					<th scope="row">{{rubriques.rubrique}}</th>
+					<th scope="col">
+						<a href="{{path('category_index',{'id':rubriques.id})}}" class="btn btn-danger">VIEW</a>
+					</th>
+					<th scope="col">
+						<a href="{{path('update_rubrique',{'id':rubriques.id})}}" class="btn btn-danger">EDIT</a>
+					</th>
+					<th scope="col">
+						<a href="{{path('delete_rubrique',{'id':rubriques.id})}}" class="btn btn-danger">DELETE</a>
+					</th>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

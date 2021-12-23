@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContenuEtudiants{% endblock %}
+
+{% block body %}
+    <h1>ContenuEtudiants</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ contenu_etudiant.id }}</td>
+            </tr>
+            <tr>
+                <th>Fullname</th>
+                <td>{{ contenu_etudiant.Fullname }}</td>
+            </tr>
+            <tr>
+                <th>Class</th>
+                <td>{{ contenu_etudiant.Class }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ contenu_etudiant.Description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('contenu_etudiants_edit', {'id': contenu_etudiant.id}) }}">edit</a>
+
+    {{ include('contenu_etudiants/_delete_form.html.twig') }}
+{% endblock %}

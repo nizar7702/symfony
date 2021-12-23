@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit DepotsEtudiants{% endblock %}
+
+{% block body %}
+    <h1>Edit DepotsEtudiants</h1>
+
+    {{ include('depots_etudiants/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+    {{ include('depots_etudiants/_delete_form.html.twig') }}
+{% endblock %}

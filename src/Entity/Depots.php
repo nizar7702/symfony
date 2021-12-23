@@ -33,6 +33,11 @@ class Depots
      */
     private $contenuDepot;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $NbLikes;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,5 +88,17 @@ class Depots
         return $this->title;
         // to show the id of the Category in the select
         //return $this->id;
+    }
+
+    public function getNbLikes(): ?float
+    {
+        return $this->NbLikes;
+    }
+
+    public function setNbLikes(float $NbLikes): self
+    {
+        $this->NbLikes = $NbLikes;
+
+        return $this;
     }
 }
