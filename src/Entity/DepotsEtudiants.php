@@ -34,7 +34,7 @@ class DepotsEtudiants
     private $Class;
 
     /**
-     * @ORM\OneToOne(targetEntity=ContenuEtudiants::class, mappedBy="depot_etudiant_id", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ContenuEtudiants::class, mappedBy="depot_etudiant_id", cascade={"persist","remove"})
      */
     private $contenuEtudiants;
 

@@ -13,6 +13,7 @@
             <tr>
                 <th>Id</th>
                 <th>Title</th>
+                <th>Likes</th>
                 <th><a href="{{ path('depots_new', {'id':ID}) }}">add depot</a></th>
                 <th>
                 </th>
@@ -23,6 +24,7 @@
             <tr>
                 <td>{{ depot.id }}</td>
                 <td>{{ depot.title }}</td>
+                <td>{{ depot.NbLikes }}</td>
                 <td>
                     <a href="{{ path('contenu_depot_index', {'id': depot.id}) }}">show</a>
                     <a href="{{ path('depots_edit', {'id': depot.id,'id1':ID}) }}">edit</a>

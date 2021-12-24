@@ -23,7 +23,7 @@ class DepotsController extends AbstractController
     public function index(DepotsRepository $depotsRepository, $id): Response
     {
         $repo = $this->getDoctrine()->getRepository(Depots::class);
-        $depots = $repo->findBy(array('category_id' => $id));
+        $depots = $repo->findBy(array('category_id' => $id),array('NbLikes' => 'DESC'));
         return $this->render('depots/index.html.twig', ['depots' => $depots, 'id' => $id]);
     }
 
@@ -38,12 +38,13 @@ class DepotsController extends AbstractController
         $repo = $this->getDoctrine()->getRepository(Category::class);
         $category = $repo->find($id);
         $depot->setCategoryId($category);
+        $depot->setNbLikes(0);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($depot);
             $entityManager->flush();
             $repo = $this->getDoctrine()->getRepository(Depots::class);
-            $depots = $repo->findBy(array('category_id' => $id));
+            $depots = $repo->findBy(array('category_id' => $id),array('NbLikes' => 'DESC'));
             return $this->render('depots/index.html.twig', ['depots' => $depots, 'id' => $id]);
         }
 
@@ -74,7 +75,7 @@ class DepotsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $repo = $this->getDoctrine()->getRepository(Depots::class);
-            $depos1 = $repo->findBy(array('category_id' => $id1));
+            $depos1 = $repo->findBy(array('category_id' => $id1),array('NbLikes' => 'DESC'));
             return $this->render('depots/index.html.twig', ['depots' => $depos1, 'id' => $id1]);
         }
 
@@ -96,7 +97,7 @@ class DepotsController extends AbstractController
         $manager->remove($depots);
         $manager->flush();
         $repo = $this->getDoctrine()->getRepository(Depots::class);
-        $depos1 = $repo->findBy(array('category_id' => $id1));
+        $depos1 = $repo->findBy(array('category_id' => $id1),array('NbLikes' => 'DESC'));
         return $this->render('depots/index.html.twig', ['depots' => $depos1, 'id' => $id1]);
     }
 }

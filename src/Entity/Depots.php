@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DepotsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,7 +21,7 @@ class Depots
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="depots")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false,)
      */
     private $category_id;
 
@@ -29,7 +31,7 @@ class Depots
     private $title;
 
     /**
-     * @ORM\OneToOne(targetEntity=ContenuDepot::class, mappedBy="depot_id", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ContenuDepot::class, mappedBy="depot_id", cascade={"persist","remove"})
      */
     private $contenuDepot;
 
@@ -37,6 +39,16 @@ class Depots
      * @ORM\Column(type="float")
      */
     private $NbLikes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Likes::class, mappedBy="contenu_depot_id",cascade={"remove"})
+     */
+    private $likes;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +110,36 @@ class Depots
     public function setNbLikes(float $NbLikes): self
     {
         $this->NbLikes = $NbLikes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Likes[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setContenuDepotId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Likes $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getContenuDepotId() === $this) {
+                $like->setContenuDepotId(null);
+            }
+        }
 
         return $this;
     }

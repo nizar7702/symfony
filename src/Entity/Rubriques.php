@@ -25,7 +25,7 @@ class Rubriques
     private $rubrique;
 
     /**
-     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="rubrique_id")
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="rubrique_id",cascade={"remove"})
      */
     private $categories;
 

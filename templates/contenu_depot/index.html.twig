@@ -5,39 +5,39 @@
 
 {% block body %}
 	{% set ID = id %}
+	{% set LIKES = likes %}
+	{% set CONTENU_DEPOTS = contenu_depots %}
 	<h1>ContenuDepot index</h1>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Title</th>
-				<th>Description</th>
-				<th>BrochureFilename</th>
-				<th></th>
-				<th>
-					<a href="{{ path('contenu_depot_new', {'id':ID}) }}">add contenu</a>
-				</th>
-			</tr>
-		</thead>
-	</th>
-</tr></thead><tbody>
-{% for contenu_depot in contenu_depots %}
+</head>
+<script src="https://kit.fontawesome.com/12902057c2.js" crossorigin="anonymous"></script></head><table class="table">
+<thead>
 	<tr>
-		<td>{{ contenu_depot.id }}</td>
-		<td>{{ contenu_depot.title }}</td>
-		<td>{{ contenu_depot.description }}</td>
-
-		<td><a href="{{ asset('/uploads/brochures/') ~ contenu_depot.brochureFilename }}" download>download</a></td>
-
-		<td>
-		    <a href="{{ path('depots_etudiants_index', {'id': contenu_depot.id}) }}">show</a>
-			<a href="{{ path('contenu_depot_edit', {'id':contenu_depot.id,'id1':ID})}}">edit</a>
-			<a href="{{ path('contenu_depot_delete',{'id1':ID,'id2': contenu_depot.id}) }}">delete</a>
-		</td>
+		<th>Id</th>
+		<th>Title</th>
+		<th>Description</th>
+		<th>BrochureFilename</th>
+		<th>{{LIKES}}</th>
+		{% if CONTENU_DEPOTS|length > 0 %}
+			<th>
+				<a href="{{ path('contenu_depot_like', {'id':ID}) }}" class="far fa-thumbs-up"></a>
+			</th>
+		{% endif %}
+		<th>
+			<a href="{{ path('contenu_depot_new', {'id':ID}) }}">add contenu</a>
+		</th>
 	</tr>
-{% else %}
-	<tr>
-		<td colspan="5">no records found</td>
-	</tr>
-{% endfor %}</tbody></table> {% endblock %}
+</thead></th></tr></thead><tbody>{% for contenu_depot in contenu_depots %}<tr>
+<td>{{ contenu_depot.id }}</td>
+<td>{{ contenu_depot.title }}</td>
+<td>{{ contenu_depot.description }}</td>
+
+<td>
+	<a href="{{ asset('/uploads/brochures/') ~ contenu_depot.brochureFilename }}" download>download</a>
+</td>
+
+<td>
+	<a href="{{ path('depots_etudiants_index', {'id': contenu_depot.id}) }}">show</a>
+	<a href="{{ path('contenu_depot_edit', {'id':contenu_depot.id,'id1':ID})}}">edit</a>
+	<a href="{{ path('contenu_depot_delete',{'id1':ID,'id2': contenu_depot.id}) }}">delete</a>
+</td></tr>{% else %}<tr>
+<td colspan="5">no records found</td></tr>{% endfor %}</tbody></table>{% endblock %}

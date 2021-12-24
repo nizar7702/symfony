@@ -18,31 +18,19 @@ class Likes
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ContenuDepot::class, inversedBy="likes")
-     */
-    private $contenu_depot_id;
-
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="likes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user_id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Depots::class, inversedBy="likes")
+     */
+    private $contenu_depot_id;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getContenuDepotId(): ?ContenuDepot
-    {
-        return $this->contenu_depot_id;
-    }
-
-    public function setContenuDepotId(?ContenuDepot $contenu_depot_id): self
-    {
-        $this->contenu_depot_id = $contenu_depot_id;
-
-        return $this;
     }
 
     public function getUserId(): ?User
@@ -50,9 +38,21 @@ class Likes
         return $this->user_id;
     }
 
-    public function setUserId(User $user_id): self
+    public function setUserId(?User $user_id): self
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    public function getContenuDepotId(): ?Depots
+    {
+        return $this->contenu_depot_id;
+    }
+
+    public function setContenuDepotId(?Depots $contenu_depot_id): self
+    {
+        $this->contenu_depot_id = $contenu_depot_id;
 
         return $this;
     }

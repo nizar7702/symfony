@@ -1,0 +1,43 @@
+u9fe-54pw-ziin
+http://localhost:8069/web#cids=1&menu_id=5&action=37&model=ir.module.module&view_type=kanban
+/*(System aide  a la décision de recouvrement.)
+/*(Dashbord pour les opérations des comptes d'utilisateurs.)Ceux-ci offrent une analyse en temps réel des informations du client, ce qui permet d’en tirer des conclusions facilement exploitables
+/*(plateforme pour la gestion des enquêtes de satisfaction des clients)
+/*(analyse de contrat) :grâce à certains programmes informatiques capables de simuler différentes variantes d’un scénario pour 
+ en connaitre les impacts Il est ensuite plus facile de p
+
+https://www.youtube.com/watch?v=QMde0Bu5smw BI (https://www.youtube.com/watch?v=tjZj_ai7vEA Fix error)
+https://www.youtube.com/watch?v=MnLZuK2DME8 (fi 3outh 7ajtin 5:44 selecti lkol)
+
+
+$repo1 = $this->getDoctrine()->getRepository(Likes::class);
+        $like = $repo1->findAll();
+        $likes=count($like);
+
+
+/**
+     * @Route("/like/{id}", name="contenu_depot_like", methods={"GET", "POST"})
+     */
+    public function like($id):Response
+    {   $manager=$this->getDoctrine()->getManager();
+        $user =$this->container->get('security.token_storage')->getToken()->getUser();
+        $repo = $this->getDoctrine()->getRepository(ContenuDepot::class);
+        $depots = $repo->find($id);
+        $like = new Likes();
+        $like->setUserId($user)
+             ->setContenuDepotId($depots);
+        $manager->persist($like);
+
+        $manager->flush();
+        $depos1 = $repo->findBy(array('depot_id' => $id));
+        $repo1 = $this->getDoctrine()->getRepository(Likes::class);
+        $likes = count(array([$repo1]));
+        return $this->render('contenu_depot/index.html.twig', ['contenu_depots' => $depos1, 'id' => $id,'likes'=>$likes]);
+    }
+
+
+
+
+<th>
+<a href="{{ path('contenu_depot_like', {'id':ID}) }}" class="far fa-thumbs-up"></a>
+</th>

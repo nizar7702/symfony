@@ -18,7 +18,7 @@ class ContenuEtudiants
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=DepotsEtudiants::class, inversedBy="contenuEtudiants", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=DepotsEtudiants::class, inversedBy="contenuEtudiants", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $depot_etudiant_id;

@@ -31,7 +31,7 @@ class Category
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Depots::class, mappedBy="category_id")
+     * @ORM\OneToMany(targetEntity=Depots::class, mappedBy="category_id",cascade={"remove"})
      */
     private $depots;
 

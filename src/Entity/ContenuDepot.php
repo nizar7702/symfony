@@ -20,7 +20,7 @@ class ContenuDepot
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Depots::class, inversedBy="contenuDepot", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Depots::class, inversedBy="contenuDepot", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $depot_id;
@@ -40,14 +40,11 @@ class ContenuDepot
     private $brochureFilename;
 
     /**
-     * @ORM\OneToMany(targetEntity=DepotsEtudiants::class, mappedBy="contenu_depot_id")
+     * @ORM\OneToMany(targetEntity=DepotsEtudiants::class, mappedBy="contenu_depot_id",cascade={"remove"})
      */
     private $depotsEtudiants;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Likes::class, mappedBy="contenu_depot_id")
-     */
-    private $likes;
+    
 
 
 
@@ -56,7 +53,6 @@ class ContenuDepot
         $this->depotsEtudiants = new ArrayCollection();
         $this->Fullname = new ArrayCollection();
         $this->user_id = new ArrayCollection();
-        $this->likes = new ArrayCollection();
     }
 
     public function getBrochureFilename()
@@ -148,35 +144,7 @@ class ContenuDepot
         //return $this->id;
     }
 
-    /**
-     * @return Collection|Likes[]
-     */
-    public function getLikes(): Collection
-    {
-        return $this->likes;
-    }
-
-    public function addLike(Likes $like): self
-    {
-        if (!$this->likes->contains($like)) {
-            $this->likes[] = $like;
-            $like->setContenuDepotId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLike(Likes $like): self
-    {
-        if ($this->likes->removeElement($like)) {
-            // set the owning side to null (unless already changed)
-            if ($like->getContenuDepotId() === $this) {
-                $like->setContenuDepotId(null);
-            }
-        }
-
-        return $this;
-    }
+    
 
    
 
